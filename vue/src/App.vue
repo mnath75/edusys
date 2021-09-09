@@ -22,7 +22,7 @@ export default {
   beforeCreate(){
     // before rendering the app, set the store (store/index.js)
     this.$store.commit('initializeStore')
-    const token = this.$store.state.user.token
+    const token = this.$store.state.token
     if (token) {
       axios.defaults.headers.common['Authorization'] = 'Token ' + token
     } else {

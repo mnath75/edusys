@@ -3,30 +3,40 @@ import { createStore } from 'vuex'
 export default createStore({
   state: {
     user: {
-      token: '',
-      isAuthenticated: false
-    }
+      username: '',
+      id: ''
+    },
+    token: '',
+    isAuthenticated: false
   },
   mutations: {
     // get info about the user from the browser to set the app
     initializeStore(state){
       if(localStorage.getItem('token')) {
-        state.user.token = localStorage.getItem('token')
-        state.user.isAuthenticated = true
+        state.token = localStorage.getItem('token')
+        state.isAuthenticated = true
+        state.user.id = localStorage.getItem('id')
+        state.user.username = localStorage.getItem('username')
       } else {
-        state.user.token = ''
-        state.user.isAuthenticated = false
+        state.token = ''
+        state.isAuthenticated = false
+        state.user.id = ''
+        state.user.username = ''
       }
     },
     // set token at login
     setToken(state, token){
-      state.user.token = token
-      state.user.isAuthenticated = true
+      state.token = token
+      state.isAuthenticated = true
     },
     // remove token at logout
-    setToken(state){
-      state.user.token = ''
-      state.user.isAuthenticated = false
+    removeToken(state){
+      state.token = ''
+      state.isAuthenticated = false
+    },
+    // see Login.vue + settings DRF
+    setUser(state, user){
+      state.user = user
     }
   },
   actions: {
