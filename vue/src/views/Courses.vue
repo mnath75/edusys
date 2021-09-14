@@ -73,7 +73,7 @@ export default {
         }
     },
     mounted() {
-        // when page instance mounted in DOM retrieve courses data
+        // when page instance is mounted in DOM, retrieve courses data
         axios
             .get('/api/v1/courses/')
             .then(response => {
