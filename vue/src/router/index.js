@@ -3,6 +3,7 @@ import Home from '../views/Home.vue'
 import About from '../views/About.vue'
 import SignUp from '../views/SignUp.vue'
 import LogIn from '../views/LogIn.vue'
+import Courses from '../views/Courses.vue'
 import Account from '../views/dashboard/Account.vue'
 
 const routes = [
@@ -30,6 +31,11 @@ const routes = [
     path: '/dashboard/account',
     name: 'Account',
     component: Account
+  },
+  {
+    path: '/courses',
+    name: 'Courses',
+    component: Courses
   }
 ]
 
