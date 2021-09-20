@@ -11,3 +11,8 @@ def get_courses(request):
     serializer=CourseListSerializer(courses, many=True)
     return Response(serializer.data)
 
+@api_view(['GET'])
+def get_course(request, course_slug):
+    coursee=Course.objects.get(cr_slug = course_slug)
+    serializer=CourseListSerializer(coursee)
+    return Response(serializer.data)
