@@ -37,7 +37,7 @@
                                         </div>
                                         <div class="content">
                                             <p> {{ course.cr_short }} </p>
-                                            <a href="">More</a>
+                                            <router-link :to="{'name': 'Course', params: {slug: course.cr_slug }}">More</router-link>
                                         </div>
                                     </div>
                                 </div>

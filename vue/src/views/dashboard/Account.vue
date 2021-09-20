@@ -22,11 +22,13 @@
 import axios from 'axios'
 export default {
     methods: {
-        logout() {
-            axios.defaults.headers.common['Authorization'] = '' // reset auth
-            localStorage.removeItem('token') // remove token from different session
-            this.$store.commit('removeToken')
-            this.$router.push('/')
+        async logout() {
+          await axios
+                    .post('/api/v1/token/logout/')
+          axios.defaults.headers.common['Authorization'] = '' // reset auth
+          localStorage.removeItem('token') // remove token from different session
+          this.$store.commit('removeToken')
+          this.$router.push('/')
         }
     }
 }
