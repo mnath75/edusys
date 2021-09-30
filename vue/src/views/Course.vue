@@ -13,19 +13,35 @@
                     <div class="column is-2">
                         <h2>Table of contents</h2>
                         <ul>
-                            <li><a href="#" >Intro</a></li>
-                            <li><a href="#">Part 1</a></li>
-                            <li><a href="#">Part 2</a></li>
-                            <li><a href="#">Summary</a></li>
+                            <li v-for="lesson in lessons" v-bind:key="lesson.ls_id">
+                                <a @click="activeLesson = lesson" >{{lesson.ls_title}}</a>
+                            </li>
                         </ul>
                     </div>
                     <div class="column is-10">
-                        <h3>Intro</h3>
-                        {{ course.cr_short }}
+                        
+                        <template v-if="activeLesson">
+                            <h3>{{activeLesson.ls_title}}</h3>
+                        </template>
+                        <template v-else>
+                            <h3>{{course.cr_title}}</h3>
+                        </template>
+
+                        <template v-if="activeLesson">
+                            {{activeLesson.ls_short}}
+                        </template>
+                        <template v-else>
+                            {{ course.cr_short }}
+                        </template>
                         
                         <template v-if="$store.state.isAuthenticated">
                             <hr>
-                            {{ course.cr_long }}
+                            <template v-if="activeLesson">
+                                {{activeLesson.ls_long}}
+                            </template>
+                            <template v-else>
+                                {{ course.cr_long }}
+                            </template>
                         </template>
                         <template v-else class="has-text-centered">
                             <hr>
@@ -45,7 +61,9 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            course: []
+            course: {},
+            lessons: [],
+            activeLesson: ""
         }
     },
     mounted() {
@@ -53,7 +71,8 @@ export default {
         axios
             .get(`/api/v1/courses/${slug}`)
             .then(response => {
-                this.course = response.data
+                this.course = response.data.course
+                this.lessons = response.data.lessons
             })
     }
 }
