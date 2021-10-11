@@ -1,11 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Category(models.Model):
     ct_id = models.AutoField(primary_key=True, db_column='ct_id') # no auto generation of pk
     ct_title = models.CharField('Title', max_length=255) # frontend label
     ct_slug = models.SlugField('Slug', max_length=255)
     ct_short = models.TextField('Short description', blank=True, null=True)
-    ct_created = models.DateTimeField('Created at', auto_now_add=True)
+    ct_created_at = models.DateTimeField('Created at', auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Categories'
@@ -24,7 +25,7 @@ class Course(models.Model):
     cr_slug = models.SlugField('Slug', max_length=255)
     cr_short = models.TextField('Short description', blank=True, null=True)
     cr_long = models.TextField('Long description', blank=True, null=True)
-    cr_created = models.DateTimeField('Created at', auto_now_add=True)
+    cr_created_at = models.DateTimeField('Created at', auto_now_add=True)
 
     class Meta:
         verbose_name_plural = 'Courses'
@@ -68,3 +69,17 @@ class Lesson(models.Model):
 
     def __str__(self):
         return f'{self.ls_course} - {self.ls_title}'
+
+
+class Comment(models.Model):
+    cm_id = models.AutoField(primary_key=True, db_column='cm_id')
+    cm_lesson = models.ForeignKey(Lesson,
+                                verbose_name='Lesson',
+                                related_name='comments',
+                                on_delete=models.CASCADE)
+    cm_title = models.CharField('Title', max_length=50)
+    cm_content = models.TextField('Content', blank=True, null=True)
+    cm_created_at = models.DateTimeField('Created at', auto_now_add=True)
+    cm_created_by = models.ForeignKey(User,
+                                related_name='comments',
+                                on_delete=models.CASCADE)
