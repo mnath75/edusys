@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Course, Lesson
+from .models import Comment, Course, Lesson, Comment
 
 
 '''
@@ -19,3 +19,9 @@ class LessonListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = ('ls_id', 'ls_title', 'ls_slug', 'ls_short', 'ls_long')
+
+
+class CommentListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Comment
+        fields = ('cm_id', 'cm_title', 'cm_content', 'cm_created_at')

@@ -2,8 +2,8 @@ from django.shortcuts import render
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
-from .models import Course
-from .serializers import CourseListSerializer, LessonListSerializer
+from .models import Course, Lesson, Comment
+from .serializers import CourseListSerializer, LessonListSerializer, CommentListSerializer
 
 
 @api_view(['GET'])
@@ -24,3 +24,27 @@ def get_course(request, course_slug):
         'lessons': lesson_serializer.data
     }
     return Response(data)
+
+@api_view(['POST'])
+def add_comment(request, course_slug, lesson_slug):
+    data = request.data
+    title = data.get('title')
+    content = data.get('content')
+
+    lesson = Lesson.objects.get(ls_slug= lesson_slug)
+
+    comment = Comment.objects.create(
+        cm_lesson=lesson,
+        cm_title=title,
+        cm_content=content,
+        cm_created_by=request.user)
+
+    return Response({'message':'comment added in db'})
+
+
+@api_view(['GET'])
+def get_comments(request, course_slug, lesson_slug):
+    lesson = Lesson.objects.get(ls_slug= lesson_slug)
+    comments=lesson.comments.all()
+    serializer=CommentListSerializer(comments, many=True)
+    return Response(serializer.data)

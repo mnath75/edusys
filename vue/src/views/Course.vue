@@ -14,7 +14,7 @@
                         <h2>Table of contents</h2>
                         <ul>
                             <li v-for="lesson in lessons" v-bind:key="lesson.ls_id">
-                                <a @click="activeLesson = lesson" >{{lesson.ls_title}}</a>
+                                <a @click="setActiveLesson(lesson)" >{{lesson.ls_title}}</a>
                             </li>
                         </ul>
                     </div>
@@ -38,6 +38,40 @@
                             <hr>
                             <template v-if="activeLesson">
                                 {{activeLesson.ls_long}}
+                                <hr>
+
+                                <article class="media box" v-for="comment in comments" v-bind:key="comment.cm_id">
+                                    <div class="media-content">
+                                        <div class="content">
+                                            <p>
+                                                <strong>{{ comment.cm_title }}</strong> <br>
+                                                {{ comment.cm_content }} <br>
+                                                <em>{{ comment.cm_created_at }}</em>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <form v-on:submit.prevent="submitComment()">
+                                    <div class="field">
+                                        <label class="label">Title</label>
+                                        <div class="control">
+                                            <input type="text" class="input" v-model="comment.title">
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <label class="label">Content</label>
+                                        <div class="control">
+                                            <textarea type="text" class="textarea" v-model="comment.content"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="control">
+                                            <button class="button is-link">Submit</button>
+                                        </div>
+                                    </div>
+                                </form>
+
                             </template>
                             <template v-else>
                                 {{ course.cr_long }}
@@ -63,7 +97,12 @@ export default {
         return {
             course: {},
             lessons: [],
-            activeLesson: ""
+            comments: [],
+            activeLesson: "",
+            comment: {
+                title: '',
+                content: ''
+            }
         }
     },
     mounted() {
@@ -74,6 +113,34 @@ export default {
                 this.course = response.data.course
                 this.lessons = response.data.lessons
             })
+    },
+    methods: {
+        setActiveLesson(lesson){
+            this.activeLesson = lesson
+            this.getComments()
+        },
+        getComments(){
+            axios
+                .get(`/api/v1/courses/${this.course.cr_slug}/${this.activeLesson.ls_slug}/comments`)
+                .then(response => {
+                    this.comments = response.data
+                })
+        },
+        submitComment(){
+
+            axios
+                .post(`/api/v1/courses/${this.course.cr_slug}/${this.activeLesson.ls_slug}`, this.comment)
+                .then(response => {
+                    this.comment.title = '' // reset form
+                    this.comment.content = ''
+
+                    alert('Cool! Your comment is in')
+                    this.getComments() // reload comment list
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+        }
     }
 }
 </script>
