@@ -65,6 +65,9 @@
                                             <textarea type="text" class="textarea" v-model="comment.content"></textarea>
                                         </div>
                                     </div>
+                                    <div class="notification is-danger" v-for="error in errors" v-bind:key="error">
+                                        {{ error }}
+                                    </div>
                                     <div class="field">
                                         <div class="control">
                                             <button class="button is-link">Submit</button>
@@ -102,7 +105,8 @@ export default {
             comment: {
                 title: '',
                 content: ''
-            }
+            },
+            errors: []
         }
     },
     mounted() {
@@ -128,18 +132,30 @@ export default {
         },
         submitComment(){
 
-            axios
-                .post(`/api/v1/courses/${this.course.cr_slug}/${this.activeLesson.ls_slug}`, this.comment)
-                .then(response => {
-                    this.comment.title = '' // reset form
-                    this.comment.content = ''
+            this.errors = [] // reset at each submission
+            if(this.comment.title === ''){
+                this.errors.push('Fill in the title!')
+            }
 
-                    alert('Cool! Your comment is in')
-                    this.getComments() // reload comment list
-                })
-                .catch(error => {
-                    console.log(error)
-                })
+            if(this.comment.content === ''){
+                this.errors.push('Fill in the content!')
+            }
+
+            if(!this.errors.length){
+                axios
+                    .post(`/api/v1/courses/${this.course.cr_slug}/${this.activeLesson.ls_slug}`, this.comment)
+                    .then(response => {
+                        this.comment.title = '' // reset form
+                        this.comment.content = ''
+
+                        alert('Cool! Your comment is in')
+                        this.getComments() // reload comment list
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+            }
+
         }
     }
 }

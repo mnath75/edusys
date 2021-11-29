@@ -14,10 +14,15 @@
                         <aside class="menu">
                             <p class="menu-label">Categories</p>
                             <ul class="menu-list">
-                                <li><a href="#" class="is-active">All courses</a></li>
-                                <li><a href="#">Programming</a></li>
-                                <li><a href="#">Design</a></li>
-                                <li><a href="#">Data science</a></li>
+                                <li>
+                                    <a v-bind:class="{'is-active': !activeCategory}" 
+                                        v-on:click="setActiveCategory('')">All courses</a>
+                                </li>
+                                <li v-for="category in categories" v-bind:key="category.ct_id" 
+                                    v-bind:class="{'is-active': category.ct_id == activeCategory.ct_id}" 
+                                    v-on:click="setActiveCategory(category)" >
+                                    <a href="#">{{category.ct_title}}</a>
+                                </li>
                             </ul>
                         </aside>
                     </div>
@@ -25,22 +30,7 @@
                         <p class="title">Courses</p>
                         <div class="columns is-multiline">
                             <div class="column is-4" v-for="course in courses" v-bind:key="course.cr_id">
-                                <div class="card">
-                                    <div class="card-image">
-                                        <figure class="image is-4by3"><img src="http://bulma.io/images/placeholders/1280x960.png" alt="image"></figure>
-                                    </div>
-                                    <div class="card-content">
-                                        <div class="media">
-                                            <div class="media-content">
-                                                <p class="is-size-5">{{ course.cr_title }} </p>
-                                            </div>
-                                        </div>
-                                        <div class="content">
-                                            <p> {{ course.cr_short }} </p>
-                                            <router-link :to="{'name': 'Course', params: {slug: course.cr_slug }}">More</router-link>
-                                        </div>
-                                    </div>
-                                </div>
+                                <CourseCard v-bind:card="course" />
                             </div>
                         </div>
                         <div class="column is-12">
@@ -66,19 +56,48 @@
 
 <script>
 import axios from 'axios'
+import CourseCard from '@/components/CourseCard'
+
 export default {
     data() {
         return {
+            categories: [],
+            activeCategory: '',
             courses: []
         }
     },
-    mounted() {
-        // when page instance is mounted in DOM, retrieve courses data
-        axios
-            .get('/api/v1/courses/')
+    async mounted() {
+
+        // when data retrieved, load page in DOM
+        await axios
+            .get('/api/v1/courses/categories/')
             .then(response => {
-                this.courses = response.data
+                this.categories = response.data
             })
+        
+        await this.getCourses()
+
+    },
+    components: {
+        CourseCard
+    }, // load components
+    methods: {
+        setActiveCategory(category) {
+            console.log('setting category',category)
+            this.activeCategory = category
+            this.getCourses()
+        },
+        getCourses() {
+            const params = {
+                'category_id': this.activeCategory.ct_id
+            }
+            axios
+                .get('/api/v1/courses/', {params})
+                .then(response => {
+                    console.log(response.data)
+                    this.courses = response.data
+                })
+        }
     }
 }
 </script>
