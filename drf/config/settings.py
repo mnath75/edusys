@@ -147,6 +147,11 @@ USE_TZ = False # do not save datetime as UTC in database
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 
+MEDIA_URL = '/uploads/' # media file url
+MEDIA_ROOT = 'uploads' # media root folder
+
+SERVER_URL = 'http://127.0.0.1:8000'
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 

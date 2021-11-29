@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Comment, Course, Lesson, Comment
+from .models import Comment, Course, Lesson, Comment, Category
 
 
 '''
@@ -9,10 +9,16 @@ It is necessary to serialize the queried object to transform it in a JSON object
 that can be handled by the view and rendered out.
 '''
 
+class CategoryListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('ct_id', 'ct_title', 'ct_slug')
+
+
 class CourseListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ('cr_id', 'cr_title', 'cr_slug', 'cr_short', 'cr_long')
+        fields = ('cr_id', 'cr_title', 'cr_slug', 'cr_short', 'cr_long', 'get_image')
 
 
 class LessonListSerializer(serializers.ModelSerializer):

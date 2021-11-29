@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.conf import settings
 
 class Category(models.Model):
     ct_id = models.AutoField(primary_key=True, db_column='ct_id') # no auto generation of pk
@@ -26,12 +27,19 @@ class Course(models.Model):
     cr_short = models.TextField('Short description', blank=True, null=True)
     cr_long = models.TextField('Long description', blank=True, null=True)
     cr_created_at = models.DateTimeField('Created at', auto_now_add=True)
+    cr_image = models.ImageField('Image', upload_to='courses/', blank=True, null=True)
 
     class Meta:
         verbose_name_plural = 'Courses'
 
     def __str__(self):
         return self.cr_title
+
+    def get_image(self):
+        if self.cr_image:
+            return settings.SERVER_URL + self.cr_image.url
+        else:
+            return 'http://bulma.io/images/placeholders/1280x960.png'
 
 
 class Lesson(models.Model):
