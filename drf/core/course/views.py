@@ -1,11 +1,13 @@
 from django.shortcuts import render
 from rest_framework.response import Response
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, authentication_classes, permission_classes
 
 from .models import Course, Lesson, Comment, Category
 from .serializers import CourseListSerializer, LessonListSerializer, CommentListSerializer, CategoryListSerializer
 
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
 def get_categories(request):
     categories=Category.objects.all()
     serializer=CategoryListSerializer(categories, many=True)
@@ -13,6 +15,8 @@ def get_categories(request):
 
 
 @api_view(['GET'])
+@authentication_classes([])
+@permission_classes([])
 def get_courses(request):
     filters = {}
     category = request.GET.get('category_id')

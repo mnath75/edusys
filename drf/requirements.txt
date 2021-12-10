@@ -33,3 +33,4 @@ sqlparse==0.4.1
 uritemplate==3.0.1
 urllib3==1.26.6
 Pillow==8.4.0
+ipdb==0.13.9

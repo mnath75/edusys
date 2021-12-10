@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.conf import settings
 
+# docker-compose exec envoice_api bash
+# use shell: python manage.py shell
+
 class Category(models.Model):
     ct_id = models.AutoField(primary_key=True, db_column='ct_id') # no auto generation of pk
     ct_title = models.CharField('Title', max_length=255) # frontend label
