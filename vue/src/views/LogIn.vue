@@ -56,6 +56,9 @@ export default {
       errors: []
     }
   },
+  mounted() {
+    document.title = 'Login | EdySys'
+  },
   methods: {
     async submitForm() {
       this.errors = []

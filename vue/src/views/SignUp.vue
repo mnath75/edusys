@@ -67,6 +67,9 @@ export default {
       errors: []
     }
   },
+  mounted() {
+    document.title = 'Sign up | EduSys'
+  },
   methods: {
     submitForm() {
       this.errors = []

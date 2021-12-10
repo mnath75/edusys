@@ -68,6 +68,8 @@ export default {
     },
     async mounted() {
 
+        document.title = 'Courses | EduSys'
+
         // when data retrieved, load page in DOM
         await axios
             .get('/api/v1/courses/categories/')

@@ -109,14 +109,15 @@ export default {
             errors: []
         }
     },
-    mounted() {
+    async mounted() {
         const slug = this.$route.params.slug
-        axios
+        await axios
             .get(`/api/v1/courses/${slug}`)
             .then(response => {
                 this.course = response.data.course
                 this.lessons = response.data.lessons
             })
+        document.title = this.course.cr_title + ' | EduSys' // add title to tab  
     },
     methods: {
         setActiveLesson(lesson){
