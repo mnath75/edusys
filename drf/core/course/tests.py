@@ -19,7 +19,7 @@ class SignupTests(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
 
-class InvoiceTests(APITestCase):
+class CourseTests(APITestCase):
 
     def setUp(self):
         self.user = User.objects.create_user(username="test2@testcase.eu", password="pwd_6789")
