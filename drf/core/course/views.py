@@ -47,13 +47,13 @@ def add_comment(request, course_slug, lesson_slug):
 
     lesson = Lesson.objects.get(ls_slug= lesson_slug)
 
-    comment = Comment.objects.create(
+    Comment.objects.create(
         cm_lesson=lesson,
         cm_title=title,
         cm_content=content,
         cm_created_by=request.user)
 
-    return Response({'message':'comment added in db'})
+    return Response({'message':'comment added in db'}) # HTTP_200_OK
 
 
 @api_view(['GET'])
