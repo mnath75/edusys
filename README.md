@@ -3,7 +3,10 @@
 ### learning management system
 
 Features:
-
+* add/edit account
+* category / course / lesson
+* add comment
+* unit testing
 
 Dev tools:
 * Postgresql 12
